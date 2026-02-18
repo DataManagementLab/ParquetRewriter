@@ -343,10 +343,19 @@ fn parse_compression_list(choices: &[String]) -> Vec<Compression> {
 }
 /// Builds the list of compression codecs to test based on the command-line strategy.
 pub fn build_compressions_list(
-    _optimizer_strategy: OptimizerStrategy,
+    optimizer_strategy: OptimizerStrategy,
     compression_choices: &[String],
 ) -> Vec<Compression> {
     let compressions = parse_compression_list(compression_choices);
+    // if the optimizer_strategy is threshold, we should ensure that UNCOMPRESSED is included for a fair baseline comparison, even if the user didn't specify it.
+    if optimizer_strategy == OptimizerStrategy::Threshold
+        && !compressions.iter().any(|c| std::mem::discriminant(c) == std::mem::discriminant(&Compression::UNCOMPRESSED))
+    {
+        log::info!("Threshold optimizer requires uncompressed baseline. Adding UNCOMPRESSED to the compression list.");
+        let mut extended_compressions = compressions.clone();
+        extended_compressions.push(Compression::UNCOMPRESSED);
+        return extended_compressions;
+    }
     info!(
         "Compressions to be tested: {:?}",
         compressions

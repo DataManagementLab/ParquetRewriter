@@ -18,7 +18,7 @@ cargo run --release -- --input <FILE> --output <FILE> [OPTIONS]
 - `--row-group-precise-row-count <N>`: Target exact rows per group.
 - `--compression <STRATEGY>`: `lightweight` (default), `optimal`, or specific codecs.
 - `--encodings <STRATEGY>`: `parquet_v2` (default), `parquet_v1`, or `plain`.
-- `--optimizer <STRATEGY>`: `brute-force` (default) checks every combination; `threshold` uses heuristics for speed.
+- `--optimizer <STRATEGY>`: `brute-force` (default) minimizes column chunk size. `threshold` skips compression unless space savings exceed a user-defined percentage.
 - `--full-report-path <PATH>`: Exports a CSV detailing the decision process for every column.
 
 For full options: `cargo run --release -- --help`
