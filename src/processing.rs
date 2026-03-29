@@ -675,7 +675,7 @@ pub fn create_rg_recipe(
         let field = arrow_schema.field(col_idx);
         let path = ColumnPath::from(field.name().as_str());
 
-        props_builder = props_builder.set_column_statistics_enabled(path.clone(), EnabledStatistics::Chunk);
+        props_builder = props_builder.set_column_statistics_enabled(path.clone(), EnabledStatistics::Page);
         // props_builder = props_builder.set_offset_index_disabled(true);
 
         if config.encoding == Encoding::RLE_DICTIONARY {
